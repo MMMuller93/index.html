@@ -1,91 +1,300 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Form ID — simple replace & print</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>EDGAR HTML Replacer — Fund Name & EIN</title>
 <style>
-  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:24px;max-width:980px}
-  h1{font-size:22px;margin:0 0 12px}
-  label{font-weight:600;margin-top:14px;display:block}
-  input{width:100%;padding:10px 12px;font-size:16px;border-radius:8px;border:1px solid #ccc}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .btns{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
-  button{background:#0b5fff;color:#fff;border:0;padding:12px 16px;border-radius:10px;font-weight:700;cursor:pointer}
-  button.secondary{background:#eee;color:#222}
-  small{color:#666}
+  :root { --bg:#0b0f14; --fg:#e8edf2; --muted:#9aa7b2; --card:#121821; --acc:#4ba3ff; --ok:#46d160; --warn:#ffcc66; --err:#ff6b6b; --bord:#243244; }
+  html,body{height:100%} body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
+  .wrap{max-width:980px;margin:40px auto;padding:0 16px}
+  h1{font-size:28px;margin:0 0 12px}
+  p.sub{color:var(--muted);margin:0 0 24px}
+  .card{background:var(--card);border:1px solid var(--bord);border-radius:14px;padding:18px;margin-bottom:18px}
+  .row{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:860px){.row{grid-template-columns:1fr 1fr}}
+  label{display:block;font-weight:600;margin:0 0 6px}
+  input[type="text"],input[type="file"],textarea{width:100%;box-sizing:border-box;background:#0f1520;border:1px solid var(--bord);color:var(--fg);padding:10px 12px;border-radius:10px}
+  textarea{min-height:180px;resize:vertical}
+  .hint{color:var(--muted);font-size:12px;margin-top:4px}
+  .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+  button{cursor:pointer;border:1px solid var(--bord);background:#122034;color:var(--fg);padding:10px 14px;border-radius:10px}
+  button.primary{background:var(--acc);border-color:var(--acc);color:#031b33;font-weight:700}
+  button.ghost{background:transparent}
+  .badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;font-size:12px;border:1px solid var(--bord);background:#0d141e}
+  .ok{color:var(--ok);border-color:#28402c;background:#0f1a12}
+  .warn{color:var(--warn);border-color:#4a3b1a;background:#16140f}
+  .err{color:var(--err);border-color:#4a1f1f;background:#180f10}
+  .grid-3{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:860px){.grid-3{grid-template-columns:1fr 1fr 1fr}}
+  details{margin-top:8px}
+  summary{cursor:pointer;color:var(--muted)}
+  pre{white-space:pre-wrap;background:#0e141e;border:1px solid var(--bord);padding:12px;border-radius:10px;max-height:280px;overflow:auto}
+  .footer{color:var(--muted);font-size:12px;margin-top:24px}
 </style>
 </head>
 <body>
-  <h1>Form ID → simple replace & print</h1>
-  <p>
-    Enter a fund name and EIN, click <b>Generate & Print</b>. Exact replacements of
-    <code>Defense VII, a Series of E1 VC, LLC</code> and <code>394238343</code> are performed.
-  </p>
+  <div class="wrap">
+    <h1>EDGAR HTML Replacer</h1>
+    <p class="sub">Upload or paste your original HTML, enter a new fund name and EIN, then download the edited file. Client-side only — nothing leaves your browser.</p>
 
-  <div class="row">
-    <div>
-      <label for="fund">Fund name</label>
-      <input id="fund" placeholder="e.g. Defense VIII, a Series of E1 VC, LLC" />
+    <div class="card">
+      <div class="grid-3">
+        <div>
+          <label for="newName">New Fund Name</label>
+          <input id="newName" type="text" placeholder="e.g., New Fund LP" />
+          <div class="hint">Replaces: <code>Goodfin II, a Series of E1 VC, LLC</code></div>
+        </div>
+        <div>
+          <label for="newEin">New EIN (format flexible)</label>
+          <input id="newEin" type="text" placeholder="e.g., 12-3456789 or 123456789" />
+          <div class="hint">Replaces: <code>394238343</code></div>
+        </div>
+        <div>
+          <label for="downloadName">Output File Name</label>
+          <input id="downloadName" type="text" placeholder="form_id.updated.html" />
+          <div class="hint">Defaults to <code>form_id.updated.html</code> if empty</div>
+        </div>
+      </div>
     </div>
-    <div>
-      <label for="ein">EIN / Tax ID</label>
-      <input id="ein" placeholder="e.g. 111111111" inputmode="numeric" />
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <label for="fileIn">Upload HTML file</label>
+          <input id="fileIn" type="file" accept=".html,.htm,text/html" />
+          <div class="hint">We’ll read it locally and show the content below.</div>
+        </div>
+        <div>
+          <label for="htmlIn">…or paste HTML</label>
+          <textarea id="htmlIn" placeholder="Paste your original HTML here"></textarea>
+        </div>
+      </div>
+      <div class="btns">
+        <button class="primary" id="doReplace">Replace &amp; Download</button>
+        <button id="previewBtn">Preview Changes</button>
+        <button class="ghost" id="resetBtn">Reset</button>
+        <span id="status" class="badge">Idle</span>
+      </div>
+      <details id="advanced">
+        <summary>Advanced (change the exact strings to search)</summary>
+        <div class="row" style="margin-top:10px">
+          <div>
+            <label for="searchName">Search string for company name</label>
+            <input id="searchName" type="text" value="Goodfin II, a Series of E1 VC, LLC" />
+          </div>
+          <div>
+            <label for="searchEin">Search string for EIN</label>
+            <input id="searchEin" type="text" value="394238343" />
+          </div>
+        </div>
+        <div class="hint">If your source uses slightly different text, adjust these. Replacements are literal (case-sensitive).</div>
+      </details>
+    </div>
+
+    <div class="card" id="previewCard" style="display:none">
+      <label>Preview (diff counts only; full HTML below)</label>
+      <div class="btns" style="margin:8px 0">
+        <span id="nameCount" class="badge ok">Name replacements: 0</span>
+        <span id="einCount" class="badge ok">EIN replacements: 0</span>
+        <span id="warnings" class="badge warn" style="display:none">⚠︎ Check search strings</span>
+      </div>
+      <label for="htmlOut">Edited HTML</label>
+      <textarea id="htmlOut" readonly></textarea>
+      <details style="margin-top:10px">
+        <summary>Show raw source blocks</summary>
+        <div class="row" style="margin-top:8px">
+          <div>
+            <label>Original (read-only)</label>
+            <pre id="origBlock"></pre>
+          </div>
+          <div>
+            <label>Edited (read-only)</label>
+            <pre id="editedBlock"></pre>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="footer">
+      Tip: To host on GitHub Pages — commit this file to your repo’s root or <code>docs/</code>, then enable Pages in Settings ➝ Pages, and choose the branch/folder.
     </div>
   </div>
-
-  <div class="btns">
-    <button id="go">Generate & Print</button>
-    <button class="secondary" id="preview">Preview</button>
-  </div>
-
-  <!-- Embed your full template -->
-  <script id="tpl" type="application/x-template">
-  <!-- BEGIN RAW TEMPLATE -->
-  <!-- contents of ford_id_template.html -->
-  <?xml version="1.0" encoding="UTF-8"?>
-  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-  <!-- full markup from ford_id_template.html goes here, exactly -->
-  <!-- END RAW TEMPLATE -->
-  </script>
 
 <script>
 (function(){
-  const OLD_FUND = "Defense VII, a Series of E1 VC, LLC";
-  const OLD_EIN  = "394238343";
-  const $ = s => document.querySelector(s);
-  const tpl = $("#tpl").textContent;
+  // Defaults (the strings to replace in your provided HTML)
+  const DEFAULT_NAME_SEARCH = "Goodfin II, a Series of E1 VC, LLC";
+  const DEFAULT_EIN_SEARCH  = "394238343";
 
-  function replaceAll(h, from, to){
-    const esc = from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    return h.replace(new RegExp(esc, "g"), to);
+  // UI elements
+  const fileIn       = document.getElementById('fileIn');
+  const htmlIn       = document.getElementById('htmlIn');
+  const doReplaceBtn = document.getElementById('doReplace');
+  const previewBtn   = document.getElementById('previewBtn');
+  const resetBtn     = document.getElementById('resetBtn');
+  const statusEl     = document.getElementById('status');
+
+  const newName      = document.getElementById('newName');
+  const newEin       = document.getElementById('newEin');
+  const dlName       = document.getElementById('downloadName');
+
+  const searchName   = document.getElementById('searchName');
+  const searchEin    = document.getElementById('searchEin');
+
+  const previewCard  = document.getElementById('previewCard');
+  const htmlOut      = document.getElementById('htmlOut');
+  const nameCount    = document.getElementById('nameCount');
+  const einCount     = document.getElementById('einCount');
+  const warnings     = document.getElementById('warnings');
+  const origBlock    = document.getElementById('origBlock');
+  const editedBlock  = document.getElementById('editedBlock');
+
+  // Initialize advanced search defaults
+  searchName.value = DEFAULT_NAME_SEARCH;
+  searchEin.value  = DEFAULT_EIN_SEARCH;
+
+  function setStatus(text, cls=''){
+    statusEl.textContent = text;
+    statusEl.className = 'badge ' + (cls || '');
   }
 
-  function buildOutHTML(fund, ein){
-    let out = tpl;
-    if (fund) out = replaceAll(out, OLD_FUND, fund.trim());
-    if (ein)  out = replaceAll(out, OLD_EIN,  ein.trim());
-    const printPatch = `<style>@media print{html,body{margin:0 !important} @page{size:Letter;margin:0}}</style>`;
-    out = out.replace(/<\/head>/i, m => printPatch + m);
-    return out;
+  function readSource(){
+    const pasted = htmlIn.value.trim();
+    if (pasted) return pasted;
+    setStatus('Reading file…');
+    const f = fileIn.files && fileIn.files[0];
+    if (!f) return '';
+    return new Promise((resolve,reject)=>{
+      const r = new FileReader();
+      r.onerror = () => reject(new Error('Failed to read file'));
+      r.onload = () => resolve(String(r.result || ''));
+      r.readAsText(f);
+    });
   }
 
-  function openWrite(html, doPrint){
-    const w = window.open("", "_blank");
-    w.document.open("text/html");
-    w.document.write(html);
-    w.document.close();
-    if (doPrint) w.addEventListener("load", () => setTimeout(() => w.print(), 300));
+  function replaceAll(haystack, needle, replacement){
+    if (!needle) return { text: haystack, count: 0 };
+    // Split/join is safe for literal global replacement, including HTML.
+    const parts = haystack.split(needle);
+    const count = Math.max(0, parts.length - 1);
+    return { text: parts.join(replacement), count };
   }
 
-  $("#go").addEventListener("click", ()=>{
-    const html = buildOutHTML($("#fund").value, $("#ein").value);
-    openWrite(html, true);
+  function validate(){
+    const errs = [];
+    if (!newName.value.trim()) errs.push('Enter a new fund name.');
+    if (!newEin.value.trim()) errs.push('Enter a new EIN.');
+    // Soft EIN check: allow digits and optional dash, but don't block other formatting if user insists
+    const einDigits = newEin.value.replace(/[^0-9]/g, '');
+    if (einDigits.length !== 9) {
+      // Not an error, just warn in preview; allow download anyway
+    }
+    return errs;
+  }
+
+  async function computeEdit(){
+    const src = await readSource();
+    if (!src) throw new Error('Provide source HTML by uploading a file or pasting it.');
+    const nameNeedle = searchName.value;
+    const einNeedle  = searchEin.value;
+
+    let edited = src;
+    const nameRes = replaceAll(edited, nameNeedle, newName.value);
+    edited = nameRes.text;
+    const einRes  = replaceAll(edited, einNeedle,  newEin.value);
+    edited = einRes.text;
+
+    return { src, edited, nameHits: nameRes.count, einHits: einRes.count };
+  }
+
+  function download(filename, text){
+    const blob = new Blob([text], {type:'text/html;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename || 'form_id.updated.html';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{
+      URL.revokeObjectURL(a.href);
+      a.remove();
+    }, 0);
+  }
+
+  // Events
+  fileIn.addEventListener('change', async ()=>{
+    const f = fileIn.files && fileIn.files[0];
+    if (!f) return;
+    try{
+      const txt = await readSource();
+      htmlIn.value = txt; // mirror into textarea so it's visible/editable
+      setStatus(`Loaded ${f.name}`, 'ok');
+      if (!dlName.value) {
+        const safe = (f.name || 'form_id.html').replace(/(\.html?|)$/i, '.updated.html');
+        dlName.value = safe;
+      }
+    }catch(e){
+      setStatus(e.message, 'err');
+    }
   });
 
-  $("#preview").addEventListener("click", ()=>{
-    const html = buildOutHTML($("#fund").value, $("#ein").value);
-    openWrite(html, false);
+  previewBtn.addEventListener('click', async ()=>{
+    const errs = validate();
+    if (errs.length){
+      setStatus(errs.join(' '), 'err');
+      previewCard.style.display = 'none';
+      return;
+    }
+    try{
+      setStatus('Computing preview…');
+      const { src, edited, nameHits, einHits } = await computeEdit();
+      nameCount.textContent = `Name replacements: ${nameHits}`;
+      einCount.textContent  = `EIN replacements: ${einHits}`;
+      nameCount.className = 'badge ' + (nameHits>0 ? 'ok' : 'warn');
+      einCount.className  = 'badge ' + (einHits>0 ? 'ok' : 'warn');
+      warnings.style.display = (nameHits===0 || einHits===0) ? 'inline-flex' : 'none';
+      htmlOut.value = edited;
+      origBlock.textContent = src.slice(0, 3000) + (src.length>3000 ? '\n…(truncated)…' : '');
+      editedBlock.textContent = edited.slice(0, 3000) + (edited.length>3000 ? '\n…(truncated)…' : '');
+      previewCard.style.display = 'block';
+      setStatus('Preview ready', 'ok');
+    }catch(e){
+      setStatus(e.message, 'err');
+      previewCard.style.display = 'none';
+    }
+  });
+
+  doReplaceBtn.addEventListener('click', async ()=>{
+    const errs = validate();
+    if (errs.length){
+      setStatus(errs.join(' '), 'err');
+      return;
+    }
+    try{
+      setStatus('Preparing download…');
+      const { edited, nameHits, einHits } = await computeEdit();
+      const out = dlName.value.trim() || 'form_id.updated.html';
+      download(out, edited);
+      if (nameHits===0 || einHits===0){
+        setStatus(`Downloaded. Note: name hits=${nameHits}, EIN hits=${einHits}.`, 'warn');
+      } else {
+        setStatus(`Downloaded ${out} (name hits=${nameHits}, EIN hits=${einHits})`, 'ok');
+      }
+    }catch(e){
+      setStatus(e.message, 'err');
+    }
+  });
+
+  resetBtn.addEventListener('click', ()=>{
+    fileIn.value = '';
+    htmlIn.value = '';
+    newName.value = '';
+    newEin.value = '';
+    dlName.value = '';
+    searchName.value = DEFAULT_NAME_SEARCH;
+    searchEin.value  = DEFAULT_EIN_SEARCH;
+    previewCard.style.display = 'none';
+    setStatus('Idle');
   });
 })();
 </script>
