@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>EDGAR Form ID — Replacer & PDF</title>
+
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <style>
   :root { --bg:#0b0f14; --fg:#e8edf2; --muted:#9aa7b2; --card:#121821; --acc:#4ba3ff; --ok:#46d160; --warn:#ffcc66; --err:#ff6b6b; --bord:#243244; }
@@ -16,6 +17,7 @@
   @media(min-width:860px){.row{grid-template-columns:1fr 1fr}}
   label{display:block;font-weight:600;margin:0 0 6px}
   input[type="text"]{width:100%;box-sizing:border-box;background:#0f1520;border:1px solid var(--bord);color:var(--fg);padding:10px 12px;border-radius:10px}
+  textarea#preview{width:100%;min-height:220px;background:#0f1520;border:1px solid var(--bord);color:var(--fg);padding:10px 12px;border-radius:10px}
   .hint{color:var(--muted);font-size:12px;margin-top:4px}
   .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
   button{cursor:pointer;border:1px solid var(--bord);background:#122034;color:var(--fg);padding:10px 14px;border-radius:10px}
@@ -24,12 +26,13 @@
   .ok{color:var(--ok);border-color:#28402c;background:#0f1a12}
   .warn{color:var(--warn);border-color:#4a3b1a;background:#16140f}
   .err{color:var(--err);border-color:#4a1f1f;background:#180f10}
-  textarea#preview{width:100%;min-height:220px;background:#0f1520;border:1px solid var(--bord);color:var(--fg);padding:10px 12px;border-radius:10px}
   .footer{color:var(--muted);font-size:12px;margin-top:24px}
 
-  /* Ensures .page-break forces a new page in print/PDF */
+  /* Print/PDF */
+  @page { size: Letter; margin: 0.5in; }
   @media print {
-    .page-break { break-before: page; }
+    .page-break { break-before: page !important; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
 </style>
 </head>
@@ -66,43 +69,31 @@
     </div>
 
     <div class="footer">
-      Tip: Commit this file to your repo (root or <code>docs/</code>), then enable GitHub Pages (Settings → Pages).  
-      PDF generation uses <code>html2pdf.js</code> via CDN; if offline, use <b>Print to PDF</b>.
+      Tip: put <code>form_id_base.html</code> (your base HTML) in this same folder so the page loads it automatically.  
+      If you prefer an all-in-one file, paste your base HTML once into the <b>EMBEDDED BASE HTML</b> block below and remove the loader URL line.
     </div>
   </div>
 
-  <!-- html2pdf.js (html2canvas + jsPDF bundle) -->
+  <!-- Load html2pdf (includes html2canvas + jsPDF) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-YcsIP0R1qHn2mWkU3FZ+2d8bqjQJ3m7f6E7B9o8Q9W0z1oYQ0Nw2b3Q0gq2wC8g8X8h0p7oYcW3k5OqD9B1g0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script>
-/*** 1) Your base HTML (no pasting needed) ***/
-const BASE_HTML = `<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> <!-- saved from url=(0063)file:///Users/Miles/Downloads/form_idbzdb-converted_edited.html --> <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>blob:https://www.filermanagement.edgarfiling.sec.gov/bbdd61fa-1e05-4bfd-ae01-2332e6f4201a</title><style type="text/css"> * {margin:0; padding:0; text-indent:0; } .s1 { color: #FFF; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 3.5pt; } .s2 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 3.5pt; } .s3 { color: #FFF; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 3pt; } .p, p { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 4pt; margin:0pt; } h1 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 4pt; } .s4 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 4pt; } .s5 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 3pt; } .s6 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 3pt; } .s7 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 4pt; } table, tbody {vertical-align: top; overflow: visible; } </style></head><body>...SNIPPET_START...`;
-
-const BASE_HTML_TAIL = `</body></html>`;
-
-// The long body omitted above continues here verbatim:
-const BASE_BODY = `...SNIPPET_CONTINUES...
-</p></body></html>`;
-
-/* NOTE:
- * To keep this file compact, I split BASE_HTML into a small head and body placeholders above.
- * For your actual deployment, REPLACE the three lines above (BASE_HTML/BASE_HTML_TAIL/BASE_BODY)
- * with ONE literal string containing your entire provided HTML exactly as-is.
- * Example:
- * const BASE_HTML = `YOUR ENTIRE HTML FROM <html>…</html>`;
- * Then remove all logic that builds from head+body pieces.
- *
- * For correctness right now, I'm going to embed your full HTML literal below in one go:
-*/
-</script>
+  <!-- BEGIN EMBEDDED BASE HTML (optional, paste your full base HTML between the backticks) -->
+  <script id="embeddedBase" type="text/plain">
+<!-- Paste your ENTIRE provided HTML here if you want a single-file setup.
+     Otherwise, leave this empty and keep the loader URL below. -->
+  </script>
+  <!-- END EMBEDDED BASE HTML -->
 
 <script>
-/*** REPLACE the previous BASE_* defs with your exact HTML (full string) ***/
-const FULL_SOURCE = `<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> <!-- saved from url=(0063)file:///Users/Miles/Downloads/form_idbzdb-converted_edited.html --> <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>blob:https://www.filermanagement.edgarfiling.sec.gov/bbdd61fa-1e05-4bfd-ae01-2332e6f4201a</title><style type="text/css"> * {margin:0; padding:0; text-indent:0; } .s1 { color: #FFF; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 3.5pt; } .s2 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 3.5pt; } .s3 { color: #FFF; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 3pt; } .p, p { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 4pt; margin:0pt; } h1 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 4pt; } .s4 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 4pt; } .s5 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 3pt; } .s6 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 3pt; } .s7 { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 4pt; } table, tbody {vertical-align: top; overflow: visible; } </style></head><body><table style="border-collapse:collapse;margin-left:4pt" cellspacing="0"><tbody><tr style="height:11pt"><td style="width:196pt;border-top-style:solid;border-top-width:1pt;border-top-color:#404040;border-left-style:solid;border-left-width:1pt;border-left-color:#404040;border-bottom-style:solid;border-bottom-width:1pt;border-bottom-color:#FFFFFF" bgcolor="#000000"><p class="s1" style="padding-top: 3pt;text-indent: 0pt;text-align: center;">Form ID Filer Information</p></td><td style="width:392pt;border-top-style:solid;border-top-width:1pt;border-top-color:#404040"><p style="padding-top: 3pt;text-indent: 0pt;text-align: left;"><br></p><p class="s2" style="text-indent: 0pt;line-height: 3pt;text-align: center;">UNITED STATES</p></td><td style="width:196pt;border-top-style:solid;border-top-width:1pt;border-top-color:#404040;border-bottom-style:solid;border-bottom-width:1pt;border-bottom-color:#FFFFFF;border-right-style:solid;border-right-width:1pt;border-right-color:#404040" bgcolor="#000000"><p class="s1" style="padding-top: 3pt;text-indent: 0pt;text-align: center;">OMB APPROVAL</p></td></tr><tr style="height:4pt"><td style="width:196pt;border-top-style:solid;border-top-width:1pt;border-top-color:#FFFFFF;border-left-style:solid;border-left-width:1pt;border-left-color:#404040" bgcolor="#666666"><p style="text-indent: 0pt;text-align: left;"><br></p></td><td style="width:392pt"><p class="s2" style="text-indent: 0pt;line-height: 3pt;text-align: center;">SECURITIES AND EXCHANGE COMMISSION</p></td><td style="width:196pt;border-top-style:solid;border-top-width:1pt;border-top-color:#FFFFFF;border-right-style:solid;border-right-width:1pt;border-right-color:#404040" bgcolor="#666666"><p style="text-indent: 0pt;text-align: left;"><br></p></td></tr><tr style="height:9pt"><td style="width:196pt;border-left-style:solid;border-left-width:1pt;border-left-color:#404040" bgcolor="#666666"><p style="padding-top: 2pt;text-indent: 0pt;text-align: left;"><br></p><p class="s3" style="text-indent: 0pt;line-height: 2pt;text-align: center;">Form ID</p></td><td style="width:392pt" rowspan="2"><p class="s2" style="text-indent: 0pt;text-align: center;">Washington, D.C. 20549</p><p style="text-indent: 0pt;text-align: left;"><br></p><p class="s2" style="text-indent: 0pt;line-height: 3pt;text-align: center;">FORM ID</p></td><td style="width:196pt;border-bottom-style:solid;border-bottom-width:1pt;border-bottom-color:#EDEDED;border-right-style:solid;border-right-width:1pt;border-right-color:#404040" bgcolor="#666666"><p class="s3" style="padding-top: 2pt;padding-left: 3pt;text-indent: 0pt;text-align: left;">OMB Number: 3235-0328</p></td></tr><tr style="height:3pt"><td style="width:196pt;border-left-style:solid;border-left-width:1pt;border-left-color:#404040" bgcolor="#666666"><p style="text-indent: 0pt;text-align: left;"><br></p></td><td style="width:196pt;border-top-style:solid;border-top-width:1pt;border-top-color:#EDEDED;border-right-style:solid;border-right-width:1pt;border-right-color:#404040" bgcolor="#666666"><p style="text-indent: 0pt;text-align: left;"><br></p></td></tr><tr style="height:11pt"><td style="width:196pt;border-left-style:solid;border-left-width:1pt;border-left-color:#404040;border-bottom-style:solid;border-bottom-width:1pt;border-bottom-color:#404040" bgcolor="#666666"><p style="text-indent: 0pt;text-align: left;"><br></p></td><td style="width:392pt;border-bottom-style:solid;border-bottom-width:1pt;border-bottom-color:#404040"><p class="s2" style="text-indent: 0pt;text-align: center;">UNIFORM APPLICATION FOR ACCESS CODES TO FILE ON EDGAR</p></td><td style="width:196pt;border-bottom-style:solid;border-bottom-width:1pt;border-bottom-color:#404040;border-right-style:solid;border-right-width:1pt;border-right-color:#404040" bgcolor="#666666"><p class="s3" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">Estimated average burden hours per response: 0.6</p></td></tr></tbody></table><p style="text-indent: 0pt;text-align: left;"><br></p><p style="padding-top: 1pt;padding-left: 2pt;text-indent: 0pt;text-align: left;"><span style=" color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: bold; text-decoration: none; font-size: 5.5pt;">PART 1 - APPLICATION FOR EDGAR ACCESS</span></p><p style="padding-left: 3pt;text-indent: 0pt;line-height: 11pt;text-align: left;"></p><p style="padding-top: 2pt;padding-left: 6pt;text-indent: 0pt;text-align: left;">(To be completed by <b>all applicants</b>)</p><h1 style="padding-top: 2pt;padding-left: 6pt;text-indent: 0pt;text-align: left;">New <span class="p">EDGAR account (new EDGAR account number, known as a Central Index Key (CIK), will be issued)</span></h1><h1 style="padding-top: 2pt;padding-left: 6pt;text-indent: 0pt;text-align: left;">Is the applicant a company or individual</h1><p style="padding-top: 2pt;padding-left: 6pt;text-indent: 0pt;text-align: left;">Only apply as an individual if you seek an EDGAR account for yourself as a natural person. All others should apply as a company.</p><p style="text-indent: 0pt;text-align: left;"><br></p><table style="border-collapse:collapse;margin-left:5.625pt" cellspacing="0"><tbody><tr style="height:11pt"><td style="width:119pt;border-bottom-style:solid;border-bottom-width:2pt;border-bottom-color:#FFFFFF" bgcolor="#DFDFFF"><p class="s4" style="padding-top: 3pt;padding-left: 3pt;text-indent: 0pt;text-align: left;">Company or individual:</p></td><td style="width:69pt"><p class="s4" style="padding-top: 3pt;padding-left: 4pt;text-indent: 0pt;text-align: left;">Company</p></td></tr><tr style="height:11pt"><td style="width:119pt;border-top-style:solid;border-top-width:2pt;border-top-color:#FFFFFF;border-bottom-style:solid;border-bottom-width:2pt;border-bottom-color:#FFFFFF" bgcolor="#DFDFFF"><p class="s4" style="padding-top: 2pt;padding-left: 3pt;text-indent: 0pt;text-align: left;">Company's full legal name:</p></td><td style="width:69pt"><p class="s4" style="padding-top: 2pt;padding-left: 4pt;text-indent: 0pt;text-align: left;">Goodfin II, a Series of E1 VC, LLC</p></td></tr>... (YOUR PROVIDED HTML CONTINUES UNCHANGED) ...<p style="padding-left: 6pt;text-indent: 0pt;text-align: left;"> </p></body></html>`;
-
-/*** 2) Config ***/
+/** Configuration **/
 const DEFAULT_NAME = "Goodfin II, a Series of E1 VC, LLC";
 const DEFAULT_EIN  = "394238343";
+
+/* If you commit form_id_base.html next to this file, we’ll load it;
+   otherwise we fall back to the EMBEDDED BASE HTML block above. */
+const DEFAULT_SOURCE_URL = "form_id_base.html";
+
+/* anchors that must start on a new page */
 const PAGE_BREAK_ANCHORS = [
   "PART 2 - COMPANY APPLICANT INFORMATION",
   "PART 3 - ACCOUNT ADMINISTRATOR INFORMATION",
@@ -111,155 +102,168 @@ const PAGE_BREAK_ANCHORS = [
   "FORM ID - NOTARIZED AUTHENTICATION"
 ];
 
-/*** 3) Helpers ***/
+/** Helpers **/
+function setStatus(msg, cls=''){ const s=document.getElementById('status'); s.textContent=msg; s.className='badge '+cls; }
+
 function replaceAllLiteral(haystack, needle, replacement){
-  if (!needle) return { text: haystack, count: 0 };
   const parts = haystack.split(needle);
   return { text: parts.join(replacement), count: Math.max(0, parts.length-1) };
 }
 
 function injectPrintCss(doc){
-  // Ensure .page-break works even if original doc lacks print CSS
   const style = doc.createElement('style');
-  style.textContent = `@media print { .page-break { break-before: page !important; } }`;
+  style.textContent = `
+    @page { size: Letter; margin: 0.5in; }
+    @media print { .page-break { break-before: page !important; } 
+                   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+  `;
   doc.head.appendChild(style);
 }
 
 function insertPageBreaks(doc){
-  // Find the block element containing each anchor and insert a .page-break before it
   const candidates = doc.querySelectorAll('p, h1, h2, h3, span, div, table');
   PAGE_BREAK_ANCHORS.forEach(anchor=>{
     for (const el of candidates){
-      if (el.textContent && el.textContent.trim().includes(anchor)){
-        // Climb to a sensible block (prefer P/H1/Div/Table)
+      if (!el || !el.textContent) continue;
+      if (el.textContent.trim().includes(anchor)){
+        // climb to a sensible block container
         let target = el;
-        const isBlockTag = n => /^(P|H1|H2|DIV|TABLE|TBODY|TR)$/i.test(n.tagName || "");
-        while (target && !isBlockTag(target)) target = target.parentElement;
+        const isBlock = n => n && /^(P|H1|H2|DIV|TABLE|TBODY|TR)$/i.test(n.tagName||"");
+        while (target && !isBlock(target)) target = target.parentElement;
         if (!target) target = el;
-
         const br = doc.createElement('div');
         br.className = 'page-break';
         target.parentElement.insertBefore(br, target);
-        break; // next anchor
+        break;
       }
     }
   });
 }
 
-function makeEditedHtml(newName, newEin){
-  // 1) Literal replacements
-  let edited = FULL_SOURCE;
+function makeEditedHtml(baseHtml, newName, newEin){
+  // literal string replacements
+  let edited = baseHtml;
   edited = replaceAllLiteral(edited, DEFAULT_NAME, newName).text;
   edited = replaceAllLiteral(edited, DEFAULT_EIN, newEin).text;
 
-  // 2) DOM post-processing: add page breaks + print CSS
+  // parse, add page breaks + print CSS, reserialize
   const parser = new DOMParser();
   const doc = parser.parseFromString(edited, 'text/html');
   injectPrintCss(doc);
   insertPageBreaks(doc);
-
-  // 3) Serialize back to full HTML
   return "<!DOCTYPE html>\n" + doc.documentElement.outerHTML;
 }
 
-function setStatus(msg, cls=''){
-  const s = document.getElementById('status');
-  s.textContent = msg;
-  s.className = 'badge ' + cls;
+async function loadBaseHtml(){
+  // try external file
+  try{
+    const res = await fetch(DEFAULT_SOURCE_URL, {cache:'no-store'});
+    if (res.ok) return await res.text();
+  }catch(e){/* ignore */}
+  // fallback to embedded script block
+  const t = document.getElementById('embeddedBase')?.textContent?.trim();
+  if (t) return t;
+  throw new Error("Base HTML not found. Either add form_id_base.html or paste your base into the EMBEDDED block.");
 }
 
-/*** 4) UI Wire-up ***/
+/** UI wiring **/
 const $ = sel => document.querySelector(sel);
 const newName = $('#newName');
 const newEin  = $('#newEin');
 const preview = $('#preview');
 
-$('#previewBtn').addEventListener('click', ()=>{
+let BASE_HTML_CACHE = "";
+
+$('#previewBtn').addEventListener('click', async ()=>{
   if (!newName.value.trim() || !newEin.value.trim()){
     setStatus('Enter fund name and EIN', 'err'); return;
   }
-  const html = makeEditedHtml(newName.value.trim(), newEin.value.trim());
-  preview.value = html;
-  setStatus('Preview ready', 'ok');
+  try{
+    if (!BASE_HTML_CACHE) BASE_HTML_CACHE = await loadBaseHtml();
+    const html = makeEditedHtml(BASE_HTML_CACHE, newName.value.trim(), newEin.value.trim());
+    preview.value = html;
+    setStatus('Preview ready', 'ok');
+  }catch(e){ setStatus(e.message, 'err'); }
 });
 
-$('#downloadHtmlBtn').addEventListener('click', ()=>{
+$('#downloadHtmlBtn').addEventListener('click', async ()=>{
   if (!newName.value.trim() || !newEin.value.trim()){
     setStatus('Enter fund name and EIN', 'err'); return;
   }
-  const html = makeEditedHtml(newName.value.trim(), newEin.value.trim());
-  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'form_id.updated.html';
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
-  setStatus('HTML downloaded', 'ok');
+  try{
+    if (!BASE_HTML_CACHE) BASE_HTML_CACHE = await loadBaseHtml();
+    const html = makeEditedHtml(BASE_HTML_CACHE, newName.value.trim(), newEin.value.trim());
+    const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'form_id.updated.html';
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
+    setStatus('HTML downloaded', 'ok');
+  }catch(e){ setStatus(e.message, 'err'); }
 });
 
 $('#downloadPdfBtn').addEventListener('click', async ()=>{
   if (!newName.value.trim() || !newEin.value.trim()){
     setStatus('Enter fund name and EIN', 'err'); return;
   }
-  setStatus('Rendering PDF…');
-  const html = makeEditedHtml(newName.value.trim(), newEin.value.trim());
-
-  // Render the BODY of the edited doc into an isolated container for html2pdf
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-
-  // Build a sandbox container that includes the original <style> and our print CSS
-  const sandbox = document.createElement('div');
-  sandbox.style.width = '816pt';   // ~ 11in letter page width in points (with margins below)
-  sandbox.style.background = '#fff';
-  sandbox.style.color = '#000';
-  // keep original styling
-  const style = doc.querySelector('head style');
-  if (style) {
-    const s = document.createElement('style');
-    s.textContent = style.textContent + "\n@media print { .page-break { break-before: page !important; } }";
-    sandbox.appendChild(s);
-  }
-  // inject content
-  const content = document.createElement('div');
-  content.innerHTML = doc.body.innerHTML;
-  sandbox.appendChild(content);
-
-  document.body.appendChild(sandbox); // attach so html2canvas can compute layout
-
   try{
+    setStatus('Rendering PDF…');
+    if (!BASE_HTML_CACHE) BASE_HTML_CACHE = await loadBaseHtml();
+    const html = makeEditedHtml(BASE_HTML_CACHE, newName.value.trim(), newEin.value.trim());
+
+    // Parse to DOM and render in a sandbox container for html2pdf
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    const sandbox = document.createElement('div');
+    sandbox.style.background = '#fff';
+    sandbox.style.color = '#000';
+    // Width to match Letter minus margins (612pt - 2*36pt = 540pt); we use 564pt for a 24pt margin in html2pdf options below.
+    sandbox.style.width = '564pt';
+
+    // preserve original styles
+    const style = doc.querySelector('head style');
+    if (style) {
+      const s = document.createElement('style');
+      s.textContent = style.textContent + "\n@media print { .page-break { break-before: page !important; } }";
+      sandbox.appendChild(s);
+    }
+    const content = document.createElement('div');
+    content.innerHTML = doc.body.innerHTML;
+    sandbox.appendChild(content);
+    document.body.appendChild(sandbox);
+
     const opt = {
-      margin:       [24, 24, 24, 24], // pt
+      margin:       [24,24,24,24], // pt
       filename:     'form_id.updated.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
+      html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
       jsPDF:        { unit: 'pt', format: 'letter', orientation: 'portrait' },
-      pagebreak:    { mode: ['css', 'legacy'] } // honors .page-break
+      pagebreak:    { mode: ['css', 'legacy'] }
     };
     await html2pdf().set(opt).from(sandbox).save();
     setStatus('PDF downloaded', 'ok');
-  } catch (e){
-    console.error(e);
-    setStatus('PDF render failed. Try Print to PDF.', 'warn');
-  } finally {
     sandbox.remove();
+  }catch(e){
+    console.error(e);
+    setStatus('PDF render failed. Try “Print to PDF”.', 'warn');
   }
 });
 
-$('#printBtn').addEventListener('click', ()=>{
+$('#printBtn').addEventListener('click', async ()=>{
   if (!newName.value.trim() || !newEin.value.trim()){
     setStatus('Enter fund name and EIN', 'err'); return;
   }
-  const html = makeEditedHtml(newName.value.trim(), newEin.value.trim());
-  const w = window.open('', '_blank');
-  if (!w) { setStatus('Popup blocked — allow popups', 'err'); return; }
-  w.document.open();
-  w.document.write(html);
-  w.document.close();
-  // Give the new window a beat to lay out, then trigger print
-  w.onload = ()=> w.print();
-  setStatus('Opened print dialog', 'ok');
+  try{
+    if (!BASE_HTML_CACHE) BASE_HTML_CACHE = await loadBaseHtml();
+    const html = makeEditedHtml(BASE_HTML_CACHE, newName.value.trim(), newEin.value.trim());
+    const w = window.open('', '_blank');
+    if (!w){ setStatus('Popup blocked — allow popups', 'err'); return; }
+    w.document.open(); w.document.write(html); w.document.close();
+    w.onload = ()=> w.print();
+    setStatus('Opened print dialog', 'ok');
+  }catch(e){ setStatus(e.message, 'err'); }
 });
 </script>
 </body>
