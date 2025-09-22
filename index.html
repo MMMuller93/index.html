@@ -42,36 +42,17 @@
     <small id="status"></small>
   </form>
 
-<!-- EIS updater -->
-<div class="card" style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-top:16px">
-  <h3 style="margin:0 0 12px">Update an existing .EIS and download</h3>
-  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px">
-    <label style="flex:1 1 280px;display:flex;flex-direction:column;gap:6px">
-      Select .EIS file
-      <input id="eisFile" type="file" accept=".EIS,.eis,application/octet-stream"/>
-    </label>
-  </div>
-  <div style="display:flex;gap:12px">
-    <button id="updateEisBtn" type="button">Update EIS with Fund Name &amp; EIN</button>
-    <button id="peekEisBtn" type="button">Peek EIS (read-only)</button>
-  </div>
-  <div id="eisStatus" style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:#444;margin-top:10px"></div>
-
 <!-- Embedded EIS (no upload needed) -->
 <div class="card" style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-top:16px">
-  <h3 style="margin:0 0 12px">Or use embedded .EIS (no upload)</h3>
-  <p class="mono" style="margin:6px 0 12px">We'll use the template EIS bundled on this page. You can peek current values or update & download directly.</p>
+  <h3 style="margin:0 0 12px">Use embedded .EIS (no upload)</h3>
+  <p class="mono" style="margin:6px 0 12px">We'll use the template EIS bundled on this page. You can peek current values or update &amp; download directly.</p>
   <div style="display:flex;gap:12px;flex-wrap:wrap">
     <button id="peekEmbeddedEisBtn" type="button">Peek embedded EIS</button>
     <button id="updateEmbeddedEisBtn" type="button">Update &amp; Download embedded EIS</button>
   </div>
   <div id="embeddedEisStatus" class="mono" style="margin-top:8px"></div>
 </div>
-
-<!-- Hidden: embedded EIS content (base64 text, as provided) -->
 <textarea id="embeddedEIS" style="display:none;">MS4wfHx7InBhcnQxIjp7ImNvbXBhbnlPckluZGl2aWR1YWwiOiJjb21wYW55IiwiY29tcGFueUNvbmZvcm1lZE5hbWUiOiJUZXN0LCBhIFNlcmllcyBvZiBUZXN0IExMQyIsImFwcGxpY2FudFR5cGUiOiJGaWxlciIsIm5vblVTQ2hlY2tib3giOmZhbHNlLCJhZGROZXdNYWlsaW5nSW5mbyI6bnVsbCwibmV3SW5mb05vblVTQ2hlY2tib3giOm51bGwsInN0cmVldEFkZHJlc3MxIjoiMzkwIE5lIDE5MXN0IFN0IFN0ZSA4NjMzIiwibmV3SW5mb1N0cmVldEFkZHJlc3MxIjpudWxsLCJzdHJlZXRBZGRyZXNzMiI6bnVsbCwibmV3SW5mb1N0cmVldEFkZHJlc3MyIjpudWxsLCJjaXR5IjoiTWlhbWkiLCJuZXdJbmZvQ2l0eSI6bnVsbCwic3RhdGUiOiJGTCIsIm5ld0luZm9TdGF0ZSI6bnVsbCwiemlwQ29kZSI6IjMzMTc5IiwiY291bnRyeSI6IlgxIiwicGhvbmVOdW1iZXIiOiI3NTc3ODQ3MDU1IiwibmV3SW5mb1ppcENvZGUiOm51bGwsIm5ld0luZm9Db3VudHJ5IjpudWxsLCJzZWN1cml0eVZpb2xhdGlvbiI6Im5vIiwiY2lrIjpudWxsLCJjb21wYW55Rm9ybUdyb3VwIjp7ImFkZE5ld0NvbXBhbnlOYW1lIjpudWxsLCJuZXdJbmZvQ29tcGFueUZ1bGxOYW1lIjoiIiwiY29tcGFueUZ1bGxOYW1lIjoiVGVzdCwgYSBTZXJpZXMgb2YgVGVzdCBMTEMiLCJub25QdWJsaWNDaGVja2JveCI6ZmFsc2V9fSwicGFydDIiOnsidGF4SWQiOiIzOS0zMzM4MDQ4IiwibmV3SW5mb1RheElkIjoiIiwiYWRkTmV3TEVJU2VsZWN0ZWQiOmZhbHNlLCJhZGROZXdUYXhJZCI6ZmFsc2UsImFkZE5ld0RvaW5nQnVzaW5lc3NBcyI6ZmFsc2UsImFkZE5ld1N0YXRlSW5jIjpmYWxzZSwiYWRkTmV3Q29tcGFueUNvdW50cnkiOmZhbHNlLCJhZGROZXdGb3JpZ25OYW1lIjpmYWxzZSwiYWRkTmV3RmljYWxZZWFyIjpmYWxzZSwiYWRkTmV3Q29tcGFueVdlYnNpdGUiOmZhbHNlLCJhZGROZXdCdXNzbmVzc0luZm8iOmZhbHNlLCJsZWdhbEVudGl0eUluZGVudGlmaWVyIjoiIiwibmV3SW5mb0xlZ2FsRW50aXR5SW5kZW50aWZpZXIiOiIiLCJsZWdhbE5hbWUiOiJUZXN0LCBhIFNlcmllcyBvZiBUZXN0IExMQyIsImRvaW5nQnVzaW5lc3NBcyI6IiIsIm5ld0luZm9Eb2luZ0J1c2luZXNzQXMiOiIiLCJub25VU0NoZWNrYm94IjpmYWxzZSwibmV3SW5mb05vblVTQ2hlY2tib3giOmZhbHNlLCJjb3VudHJ5IjoiWDEiLCJuZXdJbmZvQ291bnRyeSI6IiIsImZvcmVpZ25OYW1lIjoiIiwibmV3SW5mb0ZvcmVpZ25OYW1lIjoiIiwiY29tcGFueUNvdW50cnkiOiIiLCJuZXdDb21wYW55Q291bnRyeSI6IiIsInN0cmVldEFkZHJlc3MxIjoiMzkwIE5lIDE5MXN0IFN0IFN0ZSA4NjMzIiwibmV3SW5mb1N0cmVldEFkZHJlc3MxIjoiIiwic3RyZWV0QWRkcmVzczIiOm51bGwsIm5ld0luZm9TdHJlZXRBZGRyZXNzMiI6IiIsImNpdHkiOiJNaWFtaSIsIm5ld0luZm9DaXR5IjoiIiwic3RhdGUiOiJGTCIsIm5ld0luZm9TdGF0ZSI6IiIsInN0YXRlSW5jIjoiREUiLCJuZXdTdGF0ZUluYyI6IiIsInppcENvZGUiOiIzMzE3OSIsIm5ld0luZm9aaXBDb2RlIjoiIiwidGVsZXBob25lTnVtYmVyIjoiNzU3Nzg0NzA1NSIsInNpbmdsZU1lbWJlciI6InllcyIsImdvb2RTdGFuZGluZyI6InllcyIsImNvcHlBZGRyZXNzQ2hlY2tCb3giOnRydWUsImZpc2NhbFllYXJFbmQiOiIxMi8zMSIsIndlYnNpdGUiOiIiLCJuZXdJbmZvRmlzY2FsWWVhckVuZCI6IiIsIm5ld0luZm9XZWJzaXRlIjoiIn0sInBhcnQzIjp7ImFjY291bnRBZG1pbjEiOnsiZmlyc3ROYW1lIjoiQnJ5YW4iLCJtaWRkbGVOYW1lIjpudWxsLCJub01pZGRsZU5hbWUiOnRydWUsInN1ZmZpeCI6bnVsbCwibGFzdE5hbWUiOiJDYXNleSIsImJ1c2luZXNzVGl0bGUiOiJNYW5hZ2VyIiwiaXNFbXBsb3llZSI6InllcyIsImVtcGxveWVyIjpudWxsLCJlbXBsb3llckNJSyI6IiIsImNvbnRhY3RJbmZvIjoiY29udGFjdEluZm9QYXJ0MiIsIm5vblVTQ2hlY2tib3giOmZhbHNlLCJzdHJlZXRBZGRyZXNzMSI6IjM5MCBOZSAxOTFzdCBTdCBTdGUgODYzMyIsInN0cmVldEFkZHJlc3MyIjpudWxsLCJjaXR5IjoiTWlhbWkiLCJzdGF0ZSI6IkZMIiwiY291bnRyeSI6IlgxIiwiemlwQ29kZSI6IjMzMTc5IiwiZW1haWwiOiJhZG1pbkBhbHRlcm5hdGl2ZS5zbyIsInJlRW1haWwiOiJhZG1pbkBhbHRlcm5hdGl2ZS5zbyIsInRlbGVwaG9uZU51bWJlciI6Ijc1Nzc4NDcwNTUiLCJzZWN1cml0eVZpb2xhdGlvbiI6Im5vIn0sImFkZEFjY291bnRBZG1pbiI6Im5vIiwiYWNjb3VudEFkbWluMiI6eyJmaXJzdE5hbWUiOiIiLCJtaWRkbGVOYW1lIjoiIiwibm9NaWRkbGVOYW1lIjpudWxsLCJzdWZmaXgiOm51bGwsImxhc3ROYW1lIjoiIiwiYnVzaW5lc3NUaXRsZSI6IiIsImlzRW1wbG95ZWUiOiIiLCJlbXBsb3llciI6bnVsbCwiZW1wbG95ZXJDSUsiOiIiLCJjb250YWN0SW5mbyI6ImNvbnRhY3RJbmZvUGFydDMiLCJub25VU0NoZWNrYm94IjpmYWxzZSwic3RyZWV0QWRkcmVzczEiOiIiLCJzdHJlZXRBZGRyZXNzMiI6bnVsbCwiY2l0eSI6IiIsInN0YXRlIjoiIiwiY291bnRyeSI6IlgxIiwiemlwQ29kZSI6IiIsImVtYWlsIjoiIiwicmVFbWFpbCI6IiIsInRlbGVwaG9uZU51bWJlciI6IiIsInNlY3VyaXR5VmlvbGF0aW9uIjoiIn19LCJwYXJ0NCI6eyJmaXJzdE5hbWUiOiJCcnlhbiIsIm1pZGRsZU5hbWUiOm51bGwsIm5vTWlkZGxlTmFtZSI6dHJ1ZSwic3VmZml4IjpudWxsLCJsYXN0TmFtZSI6IkNhc2V5IiwiYnVzaW5lc3NUaXRsZSI6Ik1hbmFnZXIiLCJlbXBsb3llciI6IkFsdGVybmF0aXZlIEZpbmFuY2lhbCBDb3Jwb3JhdGlvbiIsImNvbnRhY3RJbmZvIjoiY29udGFjdEluZm9QYXJ0MiIsIm5vblVTQ2hlY2tib3giOmZhbHNlLCJjb3VudHJ5IjoiWDEiLCJzdHJlZXRBZGRyZXNzMSI6IjM5MCBOZSAxOTFzdCBTdCBTdGUgODYzMyIsInN0cmVldEFkZHJlc3MyIjpudWxsLCJjaXR5IjoiTWlhbWkiLCJzdGF0ZSI6IkZMIiwiemlwQ29kZSI6IjMzMTc5IiwiZW1haWwiOiJhZG1pbkBhbHRlcm5hdGl2ZS5zbyIsInRlbGVwaG9uZU51bWJlciI6Ijc1Nzc4NDcwNTUiLCJzZWN1cml0eVZpb2xhdGlvbiI6Im5vIn0sInBhcnQ1Ijp7ImZpbGVOYW1lIjoiIiwiZG9jdW1lbnRUeXBlIjoiKGJhc2VkIG9uIGZpbGUgdXBsb2FkZWQpIiwiZmlsZURlc2NyaXB0aW9uIjoiIiwiZmlsZXMiOltdLCJjaGlsZEFycmF5IjpbXX0sInBhcnQ2Ijp7InNpZ25lZFB1cnN1YW50Ijoibm8iLCJzaWduYXR1cmVGb3JtR3JvdXBBcHBsaWNhbnQiOnsiZmlyc3ROYW1lIjoiQnJ5YW4iLCJtaWRkbGVOYW1lIjpudWxsLCJub01pZGRsZU5hbWUiOnRydWUsInN1ZmZpeCI6bnVsbCwibGFzdE5hbWUiOiJDYXNleSIsImJ1c2luZXNzVGl0bGUiOiJNYW5hZ2VyIiwiZW1wbG95ZXIiOiJBbHRlcm5hdGl2ZSBGaW5hbmNpYWwgQ29ycG9yYXRpb24iLCJjb250YWN0SW5mbyI6ImNvbnRhY3RJbmZvUGFydDIiLCJub25VU0NoZWNrYm94IjpmYWxzZSwiY291bnRyeSI6IlgxIiwic3RyZWV0QWRkcmVzczEiOiIzOTAgTmUgMTkxc3QgU3QgU3RlIDg2MzMiLCJzdHJlZXRBZGRyZXNzMiI6bnVsbCwiY2l0eSI6Ik1pYW1pIiwic3RhdGUiOiJGTCIsInppcENvZGUiOiIzMzE3OSIsImVtYWlsIjoiYWRtaW5AYWx0ZXJuYXRpdmUuc28iLCJ0ZWxlcGhvbmVOdW1iZXIiOiI3NTc3ODQ3MDU1Iiwic2VjdXJpdHlWaW9sYXRpb24iOiJubyJ9fSwiZm9ybVR5cGUiOiJJRC1ORVdDSUsifQ==</textarea>
-
-</div>
 
   <!--
     IMPORTANT:
@@ -701,237 +682,83 @@ updated = updated.replace('</body>', toolbar + '</body>');
 
 
 <script>
-  function base64ToBytes(b64) {
-    const bin = atob(b64.replace(/\s+/g,""));
-    const out = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
-    return out;
-  }
-  function bytesToBase64(bytes) {
-    let s = "";
-    const chunk = 0x8000;
-    for (let i = 0; i < bytes.length; i += chunk) {
-      s += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
-    }
-    return btoa(s);
-  }
-  function decodeEISFile(uint8) {
-    let asText = new TextDecoder("utf-8", {fatal:false}).decode(uint8);
-    let fromBase64 = false;
-    if (!asText.includes("||") && /^[A-Za-z0-9+/=\s\r\n]+$/.test(asText)) {
-      try { asText = new TextDecoder("utf-8").decode(base64ToBytes(asText)); fromBase64 = true; } catch {}
-    }
-    const parts = asText.split("||");
-    if (parts.length < 2) throw new Error("EIS payload missing '1.0||' separator");
-    const version = parts[0].trim();
-    const jsonStr = parts.slice(1).join("||");
-    let data; try { data = JSON.parse(jsonStr); } catch(e){ throw new Error("Invalid EIS JSON: " + e.message); }
-    return { version, data, writeBase64: fromBase64 };
-  }
-  function encodeEISFile(version, data, writeBase64){
-    const payload = `${version}||` + JSON.stringify(data);
-    const bytes = new TextEncoder().encode(payload);
-    if (writeBase64) {
-      const b64 = bytesToBase64(bytes);
-      return new Blob([b64], {type:"application/octet-stream"});
-    }
-    return new Blob([bytes], {type:"application/octet-stream"});
-  }
-  function updateEISFields(data, newName, newEin){
-    const touched = [];
-    if (newName){
-      if (data?.part1?.companyConformedName !== undefined){
-        touched.push(["part1.companyConformedName", data.part1.companyConformedName, newName]);
-        data.part1.companyConformedName = newName;
-      } else {
-        for (const k of Object.keys(data?.part1 ?? {})){
-          if (k.toLowerCase() === "companyconformedname"){ touched.push([`part1.${k}`, data.part1[k], newName]); data.part1[k] = newName; break; }
-        }
-      }
-    }
-    if (newEin){
-      if (data?.part2?.taxId !== undefined){
-        touched.push(["part2.taxId", data.part2.taxId, newEin]);
-        data.part2.taxId = newEin;
-      } else if (data?.part2){
-        for (const k of Object.keys(data.part2)){
-          const kk = k.toLowerCase();
-          if (kk.includes("tax") || kk.includes("ein") || kk.includes("fein")){
-            touched.push([`part2.${k}`, data.part2[k], newEin]); data.part2[k] = newEin; break;
-          }
-        }
-      }
-    }
-    return touched;
-  }
-  function downloadBlob(blob, filename){
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
-  }
-  (function wireEIS() {
-    const peekBtn = document.getElementById("peekEisBtn");
-    const btn  = document.getElementById("updateEisBtn");
-    const file = document.getElementById("eisFile");
-    const out  = document.getElementById("eisStatus");
-    if (!btn || !file) return;
-    function getName() { return (document.getElementById("fundName")?.value || "").trim(); }
-    function getEin()  { return (document.getElementById("fundEIN")?.value  || "").trim(); }
-    if (peekBtn) {
-      peekBtn.addEventListener("click", async () => {
-        const f = file?.files?.[0];
-        if (!f) { out.innerHTML = '<span style="color:#b00020">Select a .EIS file first.</span>'; return; }
-        try {
-          const buf = new Uint8Array(await f.arrayBuffer());
-          const { version, data } = decodeEISFile(buf);
-          const name = data?.part1?.companyConformedName;
-          const ein  = data?.part2?.taxId;
-          out.innerHTML = `<span style="color:#0a7a0a">Read OK</span> (version ${version})
-<pre>${JSON.stringify({companyConformedName:name, taxId:ein}, null, 2)}</pre>`;
-        } catch(e){ out.innerHTML = `<span style="color:#b00020">Peek failed: ${e?.message || e}</span>`; }
-      });
-    }
-    btn.addEventListener("click", async () => {
-      const name = getName();
-      const ein  = getEin();
-      const f    = file?.files?.[0];
-      if (!f)      { out.innerHTML = '<span style="color:#b00020">Select a .EIS file first.</span>'; return; }
-      if (!name || !ein){ out.innerHTML = '<span style="color:#b00020">Enter Fund Name & EIN first.</span>'; return; }
-      try {
-        const buf = new Uint8Array(await f.arrayBuffer());
-        const { version, data, writeBase64 } = decodeEISFile(buf);
-        const touches = updateEISFields(data, name, ein);
-        if (!touches.length) { out.innerHTML = '<span style="color:#b00020">No updatable fields found (looked for part1.companyConformedName and part2.taxId).</span>'; return; }
-        const blob = encodeEISFile(version || '1.0', data, writeBase64);
-        const newName = (f.name.endsWith('.EIS') || f.name.endsWith('.eis')) ? f.name + '.updated' : f.name + '.EIS.updated';
-        downloadBlob(blob, newName);
-        const details = touches.map(([k,oldv,newv])=>`${k}: "${String(oldv ?? '')}" → "${String(newv)}"`).join('\n');
-        out.innerHTML = `<span style="color:#0a7a0a">Updated & downloaded:</span> ${newName}
-<pre style="white-space:pre-wrap;margin-top:6px">${details}</pre>`;
-      } catch(e){ out.innerHTML = `<span style="color:#b00020">Update failed: ${e?.message || e}</span>`; }
-    });
-  })();
+(function(){
+  // Cosmetics: nicer buttons
+  const btnCss = document.createElement('style');
+  btnCss.textContent = 'button{border:0;background:#0b5cff;color:#fff;font-weight:600;cursor:pointer;border-radius:10px;padding:10px 14px;box-shadow:0 1px 2px rgba(0,0,0,.05)} button:hover{background:#094ad1}';
+  document.head.appendChild(btnCss);
+})();
 </script>
-
-
 
 <script>
 (function wireEmbeddedEIS(){
-  // --- Self-contained helpers (no globals needed) ---
-  function base64ToBytes(b64){
-    const bin = atob(b64.replace(/\s+/g,""));
-    const out = new Uint8Array(bin.length);
-    for (let i=0;i<bin.length;i++) out[i] = bin.charCodeAt(i);
-    return out;
-  }
-  function bytesToBase64(bytes){
-    let s = ""; const chunk = 0x8000;
-    for (let i=0;i<bytes.length;i+=chunk){ s += String.fromCharCode.apply(null, bytes.subarray(i,i+chunk)); }
-    return btoa(s);
-  }
+  function base64ToBytes(b64){ const bin=atob(b64.replace(/\s+/g,'')); const out=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) out[i]=bin.charCodeAt(i); return out; }
+  function bytesToBase64(bytes){ let s=''; const chunk=0x8000; for(let i=0;i<bytes.length;i+=chunk){ s+=String.fromCharCode.apply(null, bytes.subarray(i,i+chunk)); } return btoa(s); }
   function decodeEISFile(uint8){
-    let asText = new TextDecoder("utf-8",{fatal:false}).decode(uint8);
+    let asText = new TextDecoder('utf-8',{fatal:false}).decode(uint8);
     let fromBase64 = false;
-    if (!asText.includes("||") && /^[A-Za-z0-9+/=\s\r\n]+$/.test(asText)){
-      try { asText = new TextDecoder("utf-8").decode(base64ToBytes(asText)); fromBase64 = true; } catch {}
+    if (!asText.includes('||') && /^[A-Za-z0-9+/=\s\r\n]+$/.test(asText)){
+      try { asText = new TextDecoder('utf-8').decode(base64ToBytes(asText)); fromBase64 = true; } catch {}
     }
-    const parts = asText.split("||");
-    if (parts.length < 2) throw new Error("EIS payload missing '1.0||' separator");
-    const version = parts[0].trim();
-    const jsonStr = parts.slice(1).join("||");
-    let data; try { data = JSON.parse(jsonStr); } catch(e){ throw new Error("Invalid EIS JSON: "+e.message); }
+    const parts = asText.split('||'); if (parts.length<2) throw new Error("EIS payload missing '1.0||' separator");
+    const version = parts[0].trim(); const jsonStr = parts.slice(1).join('||');
+    let data; try { data = JSON.parse(jsonStr); } catch(e){ throw new Error('Invalid EIS JSON: '+e.message); }
     return { version, data, writeBase64: fromBase64 };
   }
-  function encodeEISFile(version, data, writeBase64){
-    const payload = `${version}||` + JSON.stringify(data);
-    const bytes = new TextEncoder().encode(payload);
-    if (writeBase64){ const b64 = bytesToBase64(bytes); return new Blob([b64],{type:"application/octet-stream"}); }
-    return new Blob([bytes],{type:"application/octet-stream"});
+  function bytesFromEmbedded(){
+    const t = document.getElementById('embeddedEIS'); const content = (t?.value || t?.textContent || '').trim();
+    return new TextEncoder().encode(content);
   }
-  function updateEISFields(data, newName, newEin){
-    const touched = [];
-    if (newName){
-      if (data?.part1?.companyConformedName !== undefined){
-        touched.push(["part1.companyConformedName", data.part1.companyConformedName, newName]);
-        data.part1.companyConformedName = newName;
-      } else {
-        for (const k of Object.keys(data?.part1 ?? {})){
-          if (k.toLowerCase()==="companyconformedname"){ touched.push([`part1.${k}`, data.part1[k], newName]); data.part1[k]=newName; break; }
-        }
-      }
+  function sanitizeNameForFile(name){ return name.toLowerCase().replace(/[^a-z0-9]+/g,'').slice(0,60) || 'fund'; }
+  function normalizeEin(ein){ const d=(ein||'').replace(/\D/g,''); return d.length===9 ? d.slice(0,2)+'-'+d.slice(2) : ein; }
+  function encodeEISFile(version,data,writeBase64){ const payload = `${version}||`+JSON.stringify(data); const bytes=new TextEncoder().encode(payload); if(writeBase64){return new Blob([bytesToBase64(bytes)],{type:'application/octet-stream'});} return new Blob([bytes],{type:'application/octet-stream'}); }
+  function updateEISFields(data,newName,newEin){
+    const touched=[];
+    if(newName){
+      if (data?.part1?.companyConformedName !== undefined){ touched.push(['part1.companyConformedName', data.part1.companyConformedName, newName]); data.part1.companyConformedName = newName; }
+      else { for (const k of Object.keys(data?.part1 ?? {})){ if (k.toLowerCase()==='companyconformedname'){ touched.push(['part1.'+k, data.part1[k], newName]); data.part1[k]=newName; break; } } }
+      if (data?.part1?.companyFormGroup?.companyFullName !== undefined){ touched.push(['part1.companyFormGroup.companyFullName', data.part1.companyFormGroup.companyFullName, newName]); data.part1.companyFormGroup.companyFullName = newName; }
     }
-    if (newEin){
-      if (data?.part2?.taxId !== undefined){
-        touched.push(["part2.taxId", data.part2.taxId, newEin]);
-        data.part2.taxId = newEin;
-      } else if (data?.part2){
-        for (const k of Object.keys(data.part2)){
-          const kk = k.toLowerCase();
-          if (kk.includes("tax") || kk.includes("ein") || kk.includes("fein")){
-            touched.push([`part2.${k}`, data.part2[k], newEin]); data.part2[k] = newEin; break;
-          }
-        }
-      }
+    if(newEin){
+      newEin = normalizeEin(newEin);
+      if (data?.part2?.taxId !== undefined){ touched.push(['part2.taxId', data.part2.taxId, newEin]); data.part2.taxId = newEin; }
+      else if (data?.part2){ for(const k of Object.keys(data.part2)){ const kk=k.toLowerCase(); if(kk.includes('tax')||kk.includes('ein')||kk.includes('fein')){ touched.push(['part2.'+k, data.part2[k], newEin]); data.part2[k]=newEin; break; } } }
     }
     return touched;
   }
+  const peekBtn = document.getElementById('peekEmbeddedEisBtn');
+  const updBtn  = document.getElementById('updateEmbeddedEisBtn');
+  const status  = document.getElementById('embeddedEisStatus');
+  function getName(){ return (document.getElementById('fundName')?.value || '').trim(); }
+  function getEin(){  return (document.getElementById('fundEIN')?.value  || '').trim(); }
 
-  const peekBtn = document.getElementById("peekEmbeddedEisBtn");
-  const updBtn  = document.getElementById("updateEmbeddedEisBtn");
-  const status  = document.getElementById("embeddedEisStatus");
-  const txt     = document.getElementById("embeddedEIS");
-  if (!txt) return;
+  if(peekBtn){ peekBtn.addEventListener('click', ()=>{ try{ const {version,data}=decodeEISFile(bytesFromEmbedded()); status.innerHTML = '<span style="color:#0a7a0a">Read OK</span> (version '+version+')'+"\n<pre>"+JSON.stringify({companyConformedName:data?.part1?.companyConformedName, companyFullName:data?.part1?.companyFormGroup?.companyFullName, taxId:data?.part2?.taxId}, null, 2)+"</pre>"; }catch(e){ status.innerHTML = '<span style="color:#b00020">Peek failed: '+(e?.message||e)+'</span>'; } }); }
+  if(updBtn){ updBtn.addEventListener('click', ()=>{ const name=getName(); const ein=getEin(); if(!name||!ein){ status.innerHTML='<span style="color:#b00020">Enter Fund Name & EIN first.</span>'; return; } try{ const {version,data,writeBase64}=decodeEISFile(bytesFromEmbedded()); const touches=updateEISFields(data,name,ein); if(!touches.length){ status.innerHTML='<span style="color:#b00020">No updatable fields found.</span>'; return;} const blob=encodeEISFile(version||'1.0',data,writeBase64); const safename=sanitizeNameForFile(name)+'cik.EIS'; const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=safename; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},0); status.innerHTML='<span style="color:#0a7a0a">Updated & downloaded:</span> '+safename+"\n<pre style=\"white-space:pre-wrap;margin-top:6px\">"+touches.map(t=>t[0]+': "'+String(t[1]??'')+'" → "'+String(t[2])+'"').join('\n')+"</pre>"; }catch(e){ status.innerHTML='<span style="color:#b00020">Update failed: '+(e?.message||e)+'</span>'; } }); }
+})();
+</script>
 
-  function getEmbeddedBytes(){
-    const content = (txt.value || txt.textContent || "").trim();
-    return new TextEncoder().encode(content);
-  }
-  function getName(){ return (document.getElementById("fundName")?.value || "").trim(); }
-  function getEin(){  return (document.getElementById("fundEIN")?.value  || "").trim(); }
-
-  if (peekBtn){
-    peekBtn.addEventListener("click", () => {
-      try {
-        const buf = getEmbeddedBytes();
-        const { version, data } = decodeEISFile(buf);
-        const name = data?.part1?.companyConformedName;
-        const ein  = data?.part2?.taxId;
-        status.innerHTML = `<span style="color:#0a7a0a">Read OK</span> (version ${version})
-<pre>${JSON.stringify({companyConformedName:name, taxId:ein}, null, 2)}</pre>`;
-      } catch(e){
-        status.innerHTML = `<span style="color:#b00020">Peek failed: ${e?.message || e}</span>`;
-      }
-    });
-  }
-
-  if (updBtn){
-    updBtn.addEventListener("click", () => {
-      const name = getName();
-      const ein  = getEin();
-      if (!name || !ein){ status.innerHTML = '<span style="color:#b00020">Enter Fund Name & EIN first.</span>'; return; }
-      try {
-        const buf = getEmbeddedBytes();
-        const { version, data, writeBase64 } = decodeEISFile(buf);
-        const touches = updateEISFields(data, name, ein);
-        if (!touches.length) { status.innerHTML = '<span style="color:#b00020">No updatable fields found.</span>'; return; }
-        const blob = encodeEISFile(version || '1.0', data, writeBase64);
-        const fileName = 'embedded_template.EIS.updated';
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href=url; a.download=fileName; document.body.appendChild(a); a.click();
-        setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
-        const details = touches.map(([k,oldv,newv])=>`${k}: "${String(oldv ?? '')}" → "${String(newv)}"`).join('\n');
-        status.innerHTML = `<span style="color:#0a7a0a">Updated & downloaded:</span> ${fileName}
-<pre style="white-space:pre-wrap;margin-top:6px">${details}</pre>`;
-      } catch(e){
-        status.innerHTML = `<span style="color:#b00020">Update failed: ${e?.message || e}</span>`;
-      }
-    });
-  }
-})();</script>
-
-
+<script>
+// Override "Generate updated HTML" to also download with [fundname]cik.html and normalize EIN to 11-1111111
+(function(){
+  const qs = s=>document.querySelector(s);
+  const btn = qs('#genFormBtn'); if (!btn) return;
+  btn.addEventListener('click', ()=>{
+    const name = (qs('#fundName')?.value || '').trim();
+    const ein  = (qs('#fundEIN')?.value || '').trim();
+    const tpl  = qs('#src')?.value || '';
+    const status = qs('#formStatus');
+    if (!tpl){ status.innerHTML = '<span class="err">No Form ID template found. Paste HTML in the textarea.</span>'; return; }
+    if (!name || !ein){ status.innerHTML = '<span class="err">Enter Fund Name & EIN first.</span>'; return; }
+    const d = ein.replace(/\D/g,''); const einFmt = d.length===9 ? d.slice(0,2)+'-'+d.slice(2) : ein;
+    const html = tpl.replaceAll('%%FUND_NAME%%', name).replaceAll('%%EIN%%', einFmt);
+    const w = window.open('', '_blank'); w.document.open(); w.document.write(html); w.document.close();
+    const safename = (name.toLowerCase().replace(/[^a-z0-9]+/g,'').slice(0,60)||'fund')+'cik.html';
+    const blob = new Blob([html], {type:'text/html'}); const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download=safename; document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
+    status.innerHTML = '<span class="ok">Preview opened and HTML downloaded.</span>';
+  });
+})();
+</script>
 </body>
 </html>
